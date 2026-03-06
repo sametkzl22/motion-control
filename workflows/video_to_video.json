@@ -111,7 +111,7 @@
     "20": {
         "class_type": "IPAdapterUnifiedLoader",
         "inputs": {
-            "preset": "STANDARD",
+            "preset": "STANDARD (medium strength)",
             "model": [
                 "15",
                 0

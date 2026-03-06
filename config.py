@@ -55,7 +55,7 @@ ANIMATEDIFF_MODEL = "mm_sd_v15_v2.ckpt"
 CONTROLNET_OPENPOSE = "control_v11p_sd15_openpose.pth"
 CONTROLNET_DEPTH = "control_v11f1p_sd15_depth.pth"
 IPADAPTER_MODEL = "ip-adapter_sd15.safetensors"
-IPADAPTER_PRESET = "STANDARD"  # Lighter than PLUS, ~45MB vs ~98MB
+IPADAPTER_PRESET = "STANDARD (medium strength)"
 CLIP_VISION_MODEL = "sd1.5_model.safetensors"
 
 # ── IP-Adapter Defaults (M2-safe) ─────────────────────
