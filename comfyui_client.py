@@ -134,6 +134,17 @@ class ComfyUIClient:
             r.raise_for_status()
             return r.json()["name"]
 
+    def upload_image(self, image_path: str) -> str:
+        """Upload an image to ComfyUI's input directory. Returns the server filename."""
+        path = Path(image_path)
+        mime = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
+        with open(path, "rb") as f:
+            files = {"image": (path.name, f, mime)}
+            data = {"overwrite": "true", "type": "input"}
+            r = requests.post(f"{self.base_url}/upload/image", files=files, data=data)
+            r.raise_for_status()
+            return r.json()["name"]
+
     # ── Workflow Builders ──────────────────────────────
 
     def build_text_to_video(
@@ -182,6 +193,9 @@ class ComfyUIClient:
         cfg: float = config.DEFAULT_CFG,
         motion_scale: float = config.DEFAULT_MOTION_SCALE,
         seed: int = config.SEED,
+        image_path: Optional[str] = None,
+        ipadapter_weight: float = config.IPADAPTER_WEIGHT,
+        ipadapter_noise: float = config.IPADAPTER_NOISE,
     ) -> dict:
         """Load and parameterize the video-to-video workflow."""
         # Upload video to ComfyUI
@@ -205,7 +219,7 @@ class ComfyUIClient:
         }
         cn = cn_map.get(controlnet_type, cn_map["openpose"])
 
-        # Patch nodes
+        # Patch core nodes
         workflow["2"]["inputs"]["text"] = prompt
         workflow["3"]["inputs"]["text"] = negative_prompt
         workflow["10"]["inputs"]["video"] = server_filename
@@ -220,6 +234,20 @@ class ComfyUIClient:
         workflow["7"]["inputs"]["cfg"] = cfg
         workflow["7"]["inputs"]["denoise"] = denoise
         workflow["9"]["inputs"]["frame_rate"] = config.DEFAULT_FPS
+
+        # IP-Adapter: patch if reference image provided, else strip nodes
+        if image_path:
+            server_image = self.upload_image(image_path)
+            workflow["20"]["inputs"]["ipadapter_file"] = config.IPADAPTER_MODEL
+            workflow["21"]["inputs"]["clip_name"] = config.CLIP_VISION_MODEL
+            workflow["22"]["inputs"]["image"] = server_image
+            workflow["23"]["inputs"]["weight"] = ipadapter_weight
+            workflow["23"]["inputs"]["noise"] = ipadapter_noise
+        else:
+            # Remove IP-Adapter nodes, connect model directly to AnimateDiff
+            for nid in ["20", "21", "22", "23"]:
+                workflow.pop(nid, None)
+            workflow["5"]["inputs"]["model"] = ["1", 0]
 
         return workflow
 

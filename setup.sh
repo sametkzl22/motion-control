@@ -97,6 +97,16 @@ else
     warn "Video Helper Suite already exists."
 fi
 
+# ComfyUI-IPAdapter-Plus (for face/style consistency)
+if [ ! -d "${CUSTOM_NODES_DIR}/ComfyUI_IPAdapter_plus" ]; then
+    info "Installing IP-Adapter Plus node..."
+    git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git \
+        "${CUSTOM_NODES_DIR}/ComfyUI_IPAdapter_plus"
+    log "IP-Adapter Plus installed."
+else
+    warn "IP-Adapter Plus already exists."
+fi
+
 # ── 6. Download Models ────────────────────────────────
 download_model() {
     local url="$1"
@@ -139,6 +149,18 @@ download_model \
     "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_depth.pth" \
     "${MODELS_DIR}/controlnet/control_v11f1p_sd15_depth.pth" \
     "ControlNet Depth"
+
+# IP-Adapter Plus (SD 1.5)
+download_model \
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter-plus_sd15.safetensors" \
+    "${MODELS_DIR}/ipadapter/ip-adapter-plus_sd15.safetensors" \
+    "IP-Adapter Plus (SD 1.5)"
+
+# CLIP Vision Encoder (required by IP-Adapter)
+download_model \
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors" \
+    "${MODELS_DIR}/clip_vision/sd1.5_model.safetensors" \
+    "CLIP Vision Encoder (SD 1.5)"
 
 # ── 7. Create output directory ────────────────────────
 mkdir -p "${PROJECT_DIR}/outputs"

@@ -130,7 +130,7 @@ def generate_t2v(prompt, negative_prompt, width, height, frames, steps, cfg, mot
 
 
 # ── Video-to-Video Generator ──────────────────────────
-def generate_v2v(video, prompt, negative_prompt, controlnet_type, strength, denoise, frames, steps, cfg, motion_scale, seed, progress=gr.Progress()):
+def generate_v2v(video, prompt, negative_prompt, controlnet_type, strength, denoise, frames, steps, cfg, motion_scale, seed, ref_image, ipa_weight, ipa_noise, progress=gr.Progress()):
     if not video:
         raise gr.Error("Please upload a reference video!")
     if not prompt.strip():
@@ -157,6 +157,9 @@ def generate_v2v(video, prompt, negative_prompt, controlnet_type, strength, deno
             cfg=float(cfg),
             motion_scale=float(motion_scale),
             seed=int(seed),
+            image_path=ref_image if ref_image else None,
+            ipadapter_weight=float(ipa_weight),
+            ipadapter_noise=float(ipa_noise),
         )
 
         if result_path:
@@ -176,7 +179,7 @@ def create_app():
 
         # Header
         gr.Markdown("# 🎬 AI Video Motion Control", elem_id="app-title")
-        gr.Markdown("MacBook Air M2 · AnimateDiff · ControlNet · ComfyUI", elem_id="app-subtitle")
+        gr.Markdown("MacBook Air M2 · AnimateDiff · ControlNet · IP-Adapter · ComfyUI", elem_id="app-subtitle")
 
         # Status bar
         status = gr.Markdown(value=check_status)
@@ -245,6 +248,17 @@ def create_app():
                             info="OpenPose = skeleton tracking · Depth = depth map",
                         )
 
+                        gr.Markdown("### 🖼️ Face & Style Reference (IP-Adapter)")
+                        v2v_ref_image = gr.Image(
+                            label="Reference Person / Style",
+                            type="filepath",
+                            sources=["upload"],
+                        )
+
+                        with gr.Row():
+                            v2v_ipa_weight = gr.Slider(0.3, 1.0, value=config.IPADAPTER_WEIGHT, step=0.05, label="IP-Adapter Weight", info="Higher = more faithful to reference")
+                            v2v_ipa_noise = gr.Slider(0.0, 0.2, value=config.IPADAPTER_NOISE, step=0.01, label="IP-Adapter Noise", info="Low noise is safer for M2")
+
                         with gr.Row():
                             v2v_strength = gr.Slider(0.3, 1.0, value=0.85, step=0.05, label="ControlNet Strength")
                             v2v_denoise = gr.Slider(0.3, 1.0, value=config.DEFAULT_DENOISE, step=0.05, label="Denoise Strength")
@@ -266,7 +280,7 @@ def create_app():
 
                 v2v_btn.click(
                     fn=generate_v2v,
-                    inputs=[v2v_video, v2v_prompt, v2v_neg, v2v_controlnet, v2v_strength, v2v_denoise, v2v_frames, v2v_steps, v2v_cfg, v2v_motion, v2v_seed],
+                    inputs=[v2v_video, v2v_prompt, v2v_neg, v2v_controlnet, v2v_strength, v2v_denoise, v2v_frames, v2v_steps, v2v_cfg, v2v_motion, v2v_seed, v2v_ref_image, v2v_ipa_weight, v2v_ipa_noise],
                     outputs=v2v_output,
                 )
 

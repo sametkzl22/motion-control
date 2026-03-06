@@ -92,6 +92,50 @@
             ]
         }
     },
+    "20": {
+        "class_type": "IPAdapterModelLoader",
+        "inputs": {
+            "ipadapter_file": "ip-adapter-plus_sd15.safetensors"
+        }
+    },
+    "21": {
+        "class_type": "CLIPVisionLoader",
+        "inputs": {
+            "clip_name": "sd1.5_model.safetensors"
+        }
+    },
+    "22": {
+        "class_type": "LoadImage",
+        "inputs": {
+            "image": "REFERENCE_IMAGE"
+        }
+    },
+    "23": {
+        "class_type": "IPAdapterApply",
+        "inputs": {
+            "weight": 0.7,
+            "noise": 0.05,
+            "weight_type": "linear",
+            "start_at": 0.0,
+            "end_at": 1.0,
+            "model": [
+                "1",
+                0
+            ],
+            "ipadapter": [
+                "20",
+                0
+            ],
+            "clip_vision": [
+                "21",
+                0
+            ],
+            "image": [
+                "22",
+                0
+            ]
+        }
+    },
     "5": {
         "class_type": "ADE_AnimateDiffLoaderWithContext",
         "inputs": {
@@ -100,7 +144,7 @@
             "motion_scale": 1.0,
             "apply_v2_models_properly": true,
             "model": [
-                "1",
+                "23",
                 0
             ],
             "context_options": [

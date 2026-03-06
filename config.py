@@ -47,6 +47,12 @@ SD_CHECKPOINT = "v1-5-pruned-emaonly.safetensors"
 ANIMATEDIFF_MODEL = "mm_sd_v15_v2.ckpt"
 CONTROLNET_OPENPOSE = "control_v11p_sd15_openpose.pth"
 CONTROLNET_DEPTH = "control_v11f1p_sd15_depth.pth"
+IPADAPTER_MODEL = "ip-adapter-plus_sd15.safetensors"
+CLIP_VISION_MODEL = "sd1.5_model.safetensors"
+
+# ── IP-Adapter Defaults (M2-safe) ─────────────────────
+IPADAPTER_WEIGHT = 0.7   # 0.6-0.8 range balances fidelity vs. creativity
+IPADAPTER_NOISE = 0.05   # Low noise keeps M2 memory stable
 
 # ── Sampler Settings ──────────────────────────────────
 DEFAULT_SAMPLER = "euler_ancestral"
