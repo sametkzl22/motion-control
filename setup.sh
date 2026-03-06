@@ -60,6 +60,10 @@ pip install -r "${COMFYUI_DIR}/requirements.txt" -q
 # PyTorch nightly with MPS support (Apple Silicon)
 info "Installing PyTorch with MPS support..."
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu -q
+
+# onnxruntime with CoreML for DWPose GPU acceleration on Apple Silicon
+info "Installing onnxruntime (CoreML backend for DWPose)..."
+pip install onnxruntime -q
 log "ComfyUI dependencies installed."
 
 # ── 5. ComfyUI Custom Nodes ──────────────────────────
@@ -150,11 +154,11 @@ download_model \
     "${MODELS_DIR}/controlnet/control_v11f1p_sd15_depth.pth" \
     "ControlNet Depth"
 
-# IP-Adapter Plus (SD 1.5)
+# IP-Adapter Standard (SD 1.5) — lighter than Plus
 download_model \
-    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter-plus_sd15.safetensors" \
-    "${MODELS_DIR}/ipadapter/ip-adapter-plus_sd15.safetensors" \
-    "IP-Adapter Plus (SD 1.5)"
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors" \
+    "${MODELS_DIR}/ipadapter/ip-adapter_sd15.safetensors" \
+    "IP-Adapter Standard (SD 1.5)"
 
 # CLIP Vision Encoder (required by IP-Adapter)
 download_model \

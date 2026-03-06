@@ -111,7 +111,7 @@
     "20": {
         "class_type": "IPAdapterUnifiedLoader",
         "inputs": {
-            "preset": "PLUS (high strength)",
+            "preset": "STANDARD",
             "model": [
                 "15",
                 0

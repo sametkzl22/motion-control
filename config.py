@@ -34,7 +34,7 @@ if LOW_VRAM:
 # ── M2 Safe Mode Defaults (384x384 + LCM) ─────────────
 DEFAULT_WIDTH = 384
 DEFAULT_HEIGHT = 384
-DEFAULT_FRAMES = 12  # ~1.5 seconds at 8fps (lighter)
+DEFAULT_FRAMES = 8  # ~1 second at 8fps (M2-safe)
 MAX_FRAMES = 16  # ~2 seconds cap
 DEFAULT_FPS = 8
 DEFAULT_STEPS = 6  # LCM needs only 4-8 steps
@@ -54,7 +54,8 @@ SD_CHECKPOINT = "v1-5-pruned-emaonly.safetensors"
 ANIMATEDIFF_MODEL = "mm_sd_v15_v2.ckpt"
 CONTROLNET_OPENPOSE = "control_v11p_sd15_openpose.pth"
 CONTROLNET_DEPTH = "control_v11f1p_sd15_depth.pth"
-IPADAPTER_MODEL = "ip-adapter-plus_sd15.safetensors"
+IPADAPTER_MODEL = "ip-adapter_sd15.safetensors"
+IPADAPTER_PRESET = "STANDARD"  # Lighter than PLUS, ~45MB vs ~98MB
 CLIP_VISION_MODEL = "sd1.5_model.safetensors"
 
 # ── IP-Adapter Defaults (M2-safe) ─────────────────────
