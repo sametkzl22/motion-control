@@ -37,7 +37,7 @@ DEFAULT_HEIGHT = 384
 DEFAULT_FRAMES = 8  # ~1 second at 8fps (M2-safe)
 MAX_FRAMES = 16  # ~2 seconds cap
 DEFAULT_FPS = 8
-DEFAULT_STEPS = 6  # LCM needs only 4-8 steps
+DEFAULT_STEPS = 12  # Increased slowly from 6 to 12 for better rendering without over-stressing RAM
 DEFAULT_CFG = 1.8  # LCM works best at low CFG (1.5-2.5)
 DEFAULT_MOTION_SCALE = 1.0
 DEFAULT_DENOISE = 0.70  # For video-to-video
@@ -49,13 +49,13 @@ LCM_LORA_STRENGTH = 1.0
 LCM_SAMPLER = "lcm"
 LCM_SCHEDULER = "sgm_uniform"
 
-# ── Model Names (must match files in ComfyUI/models/) ─
-SD_CHECKPOINT = "v1-5-pruned-emaonly.safetensors"
+# ── Models ─────────────────────────────────────────────
+CHECKPOINT_MODEL = "v1-5-pruned.safetensors"  # Lighter Checkpoint
 ANIMATEDIFF_MODEL = "mm_sd_v15_v2.ckpt"
 CONTROLNET_OPENPOSE = "control_v11p_sd15_openpose.pth"
 CONTROLNET_DEPTH = "control_v11f1p_sd15_depth.pth"
 IPADAPTER_MODEL = "ip-adapter_sd15.safetensors"
-IPADAPTER_PRESET = "STANDARD (medium strength)"
+IPADAPTER_PRESET = "LIGHT - SD1.5 only (low strength)"  # Absolute lightest preset
 CLIP_VISION_MODEL = "sd1.5_model.safetensors"
 
 # ── IP-Adapter Defaults (M2-safe) ─────────────────────

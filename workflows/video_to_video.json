@@ -2,7 +2,7 @@
     "1": {
         "class_type": "CheckpointLoaderSimple",
         "inputs": {
-            "ckpt_name": "v1-5-pruned-emaonly.safetensors"
+            "ckpt_name": "v1-5-pruned.safetensors"
         }
     },
     "15": {
@@ -111,7 +111,7 @@
     "20": {
         "class_type": "IPAdapterUnifiedLoader",
         "inputs": {
-            "preset": "STANDARD (medium strength)",
+            "preset": "LIGHT - SD1.5 only (low strength)",
             "model": [
                 "15",
                 0

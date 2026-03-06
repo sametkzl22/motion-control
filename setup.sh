@@ -130,11 +130,11 @@ download_model() {
 
 MODELS_DIR="${COMFYUI_DIR}/models"
 
-# SD 1.5 Checkpoint
+# SD 1.5 Checkpoint (Light Pruned)
 download_model \
-    "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors" \
-    "${MODELS_DIR}/checkpoints/v1-5-pruned-emaonly.safetensors" \
-    "Stable Diffusion 1.5"
+    "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned.safetensors" \
+    "${MODELS_DIR}/checkpoints/v1-5-pruned.safetensors" \
+    "SD 1.5 Checkpoint (Pruned)"
 
 # AnimateDiff Motion Module
 download_model \
