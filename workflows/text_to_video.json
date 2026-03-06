@@ -107,6 +107,9 @@
         "class_type": "VAEDecodeTiled",
         "inputs": {
             "tile_size": 256,
+            "overlap": 64,
+            "temporal_size": 64,
+            "temporal_overlap": 8,
             "samples": [
                 "7",
                 0
