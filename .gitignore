@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+
+# ComfyUI (cloned by setup.sh)
+ComfyUI/
+
+# Outputs
+outputs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

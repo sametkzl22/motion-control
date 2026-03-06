@@ -1,0 +1,10 @@
+# AI Video Motion Control — Dependencies
+# ComfyUI runs in its own venv; these are for the Gradio wrapper.
+
+gradio>=4.0.0
+requests>=2.31.0
+websocket-client>=1.6.0
+Pillow>=10.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+tqdm>=4.65.0
