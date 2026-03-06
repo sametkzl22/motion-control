@@ -93,15 +93,13 @@
         }
     },
     "20": {
-        "class_type": "IPAdapterModelLoader",
+        "class_type": "IPAdapterUnifiedLoader",
         "inputs": {
-            "ipadapter_file": "ip-adapter-plus_sd15.safetensors"
-        }
-    },
-    "21": {
-        "class_type": "CLIPVisionLoader",
-        "inputs": {
-            "clip_name": "sd1.5_model.safetensors"
+            "preset": "PLUS (high strength)",
+            "model": [
+                "1",
+                0
+            ]
         }
     },
     "22": {
@@ -111,24 +109,19 @@
         }
     },
     "23": {
-        "class_type": "IPAdapterApply",
+        "class_type": "IPAdapter",
         "inputs": {
             "weight": 0.7,
-            "noise": 0.05,
-            "weight_type": "linear",
+            "weight_type": "standard",
             "start_at": 0.0,
             "end_at": 1.0,
             "model": [
-                "1",
+                "20",
                 0
             ],
             "ipadapter": [
                 "20",
-                0
-            ],
-            "clip_vision": [
-                "21",
-                0
+                1
             ],
             "image": [
                 "22",

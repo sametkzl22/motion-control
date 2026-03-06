@@ -238,14 +238,11 @@ class ComfyUIClient:
         # IP-Adapter: patch if reference image provided, else strip nodes
         if image_path:
             server_image = self.upload_image(image_path)
-            workflow["20"]["inputs"]["ipadapter_file"] = config.IPADAPTER_MODEL
-            workflow["21"]["inputs"]["clip_name"] = config.CLIP_VISION_MODEL
             workflow["22"]["inputs"]["image"] = server_image
             workflow["23"]["inputs"]["weight"] = ipadapter_weight
-            workflow["23"]["inputs"]["noise"] = ipadapter_noise
         else:
             # Remove IP-Adapter nodes, connect model directly to AnimateDiff
-            for nid in ["20", "21", "22", "23"]:
+            for nid in ["20", "22", "23"]:
                 workflow.pop(nid, None)
             workflow["5"]["inputs"]["model"] = ["1", 0]
 
