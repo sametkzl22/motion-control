@@ -242,26 +242,25 @@ def create_app():
                             lines=2,
                         )
 
-                        v2v_controlnet = gr.Radio(
-                            choices=["openpose", "depth"],
-                            value="openpose",
-                            label="ControlNet Type",
-                            info="OpenPose = skeleton tracking · Depth = depth map",
-                        )
-
-                        gr.Markdown("### 🖼️ Face & Style Reference (IP-Adapter)")
-                        v2v_ref_image = gr.Image(
-                            label="Reference Person / Style",
-                            type="filepath",
-                            sources=["upload"],
-                        )
-
                         with gr.Row():
+                            v2v_controlnet = gr.Dropdown(
+                                label="ControlNet Mode",
+                                choices=["openpose", "depth", "softedge"],
+                                value="softedge",
+                                info="SoftEdge preserves silhouette better for character replacement.",
+                            )
+                            v2v_strength = gr.Slider(
+                                minimum=0.1,
+                                maximum=1.0,
+                                value=0.85,
+                                step=0.05,
+                                label="ControlNet Strength",
+                            )
+
                             v2v_ipa_weight = gr.Slider(0.3, 1.0, value=config.IPADAPTER_WEIGHT, step=0.05, label="IP-Adapter Weight", info="Higher = more faithful to reference")
                             v2v_ipa_noise = gr.Slider(0.0, 0.2, value=config.IPADAPTER_NOISE, step=0.01, label="IP-Adapter Noise", info="Low noise is safer for M2")
 
                         with gr.Row():
-                            v2v_strength = gr.Slider(0.3, 1.0, value=0.85, step=0.05, label="ControlNet Strength")
                             v2v_denoise = gr.Slider(0.3, 1.0, value=config.DEFAULT_DENOISE, step=0.05, label="Denoise Strength")
 
                         with gr.Row():

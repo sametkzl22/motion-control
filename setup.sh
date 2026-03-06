@@ -41,6 +41,7 @@ pip install --upgrade pip -q
 # ── 2. Install wrapper dependencies ──────────────────
 info "Installing Gradio wrapper dependencies..."
 pip install -r "${PROJECT_DIR}/requirements.txt" -q
+pip install insightface -q  # Required for IP-Adapter Face ID models
 log "Wrapper dependencies installed."
 
 # ── 3. Clone ComfyUI ─────────────────────────────────
@@ -154,11 +155,17 @@ download_model \
     "${MODELS_DIR}/controlnet/control_v11f1p_sd15_depth.pth" \
     "ControlNet Depth"
 
-# IP-Adapter LIGHT (SD 1.5) — lightest possible preset
+# ControlNet SoftEdge (for preserving silhouette in Character Replacement)
 download_model \
-    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15_light.safetensors" \
-    "${MODELS_DIR}/ipadapter/ip-adapter_sd15_light.safetensors" \
-    "IP-Adapter LIGHT (SD 1.5)"
+    "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_softedge.pth" \
+    "${MODELS_DIR}/controlnet/control_v11p_sd15_softedge.pth" \
+    "ControlNet SoftEdge"
+
+# IP-Adapter Face Plus (SD 1.5) — identity retention
+download_model \
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter-plus-face_sd15.safetensors" \
+    "${MODELS_DIR}/ipadapter/ip-adapter-plus-face_sd15.safetensors" \
+    "IP-Adapter Plus Face (SD 1.5)"
 
 # CLIP Vision Encoder (required by IP-Adapter)
 download_model \

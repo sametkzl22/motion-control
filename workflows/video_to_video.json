@@ -57,7 +57,7 @@
     "11": {
         "class_type": "AIO_Preprocessor",
         "inputs": {
-            "preprocessor": "CONTROLNET_PREPROCESSOR",
+            "preprocessor": "PiDiNetPreprocessor",
             "resolution": 384,
             "image": [
                 "10",
@@ -111,7 +111,7 @@
     "20": {
         "class_type": "IPAdapterUnifiedLoader",
         "inputs": {
-            "preset": "LIGHT - SD1.5 only (low strength)",
+            "preset": "PLUS FACE (portraits)",
             "model": [
                 "15",
                 0

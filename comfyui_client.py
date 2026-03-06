@@ -254,6 +254,10 @@ class ComfyUIClient:
                 "model": config.CONTROLNET_DEPTH,
                 "preprocessor": "DepthAnythingPreprocessor",
             },
+            "softedge": {
+                "model": config.CONTROLNET_SOFTEDGE,
+                "preprocessor": "PiDiNetPreprocessor",
+            },
         }
         cn = cn_map.get(controlnet_type, cn_map["openpose"])
 
