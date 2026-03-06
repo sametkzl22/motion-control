@@ -154,11 +154,11 @@ download_model \
     "${MODELS_DIR}/controlnet/control_v11f1p_sd15_depth.pth" \
     "ControlNet Depth"
 
-# IP-Adapter Standard (SD 1.5) — lighter than Plus
+# IP-Adapter LIGHT (SD 1.5) — lightest possible preset
 download_model \
-    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors" \
-    "${MODELS_DIR}/ipadapter/ip-adapter_sd15.safetensors" \
-    "IP-Adapter Standard (SD 1.5)"
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15_light.safetensors" \
+    "${MODELS_DIR}/ipadapter/ip-adapter_sd15_light.safetensors" \
+    "IP-Adapter LIGHT (SD 1.5)"
 
 # CLIP Vision Encoder (required by IP-Adapter)
 download_model \

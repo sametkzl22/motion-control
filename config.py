@@ -54,7 +54,7 @@ CHECKPOINT_MODEL = "v1-5-pruned.safetensors"  # Lighter Checkpoint
 ANIMATEDIFF_MODEL = "mm_sd_v15_v2.ckpt"
 CONTROLNET_OPENPOSE = "control_v11p_sd15_openpose.pth"
 CONTROLNET_DEPTH = "control_v11f1p_sd15_depth.pth"
-IPADAPTER_MODEL = "ip-adapter_sd15.safetensors"
+IPADAPTER_MODEL = "ip-adapter_sd15_light.safetensors"
 IPADAPTER_PRESET = "LIGHT - SD1.5 only (low strength)"  # Absolute lightest preset
 CLIP_VISION_MODEL = "sd1.5_model.safetensors"
 
