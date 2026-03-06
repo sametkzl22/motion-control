@@ -31,16 +31,23 @@ COMFYUI_EXTRA_ARGS = [
 if LOW_VRAM:
     COMFYUI_EXTRA_ARGS.append("--lowvram")
 
-# ── Generation Defaults ───────────────────────────────
-DEFAULT_WIDTH = 512
-DEFAULT_HEIGHT = 512
-DEFAULT_FRAMES = 16  # ~2 seconds at 8fps
-MAX_FRAMES = 24  # ~3 seconds at 8fps
+# ── M2 Safe Mode Defaults (384x384 + LCM) ─────────────
+DEFAULT_WIDTH = 384
+DEFAULT_HEIGHT = 384
+DEFAULT_FRAMES = 12  # ~1.5 seconds at 8fps (lighter)
+MAX_FRAMES = 16  # ~2 seconds cap
 DEFAULT_FPS = 8
-DEFAULT_STEPS = 20
-DEFAULT_CFG = 7.5
+DEFAULT_STEPS = 6  # LCM needs only 4-8 steps
+DEFAULT_CFG = 1.8  # LCM works best at low CFG (1.5-2.5)
 DEFAULT_MOTION_SCALE = 1.0
-DEFAULT_DENOISE = 0.75  # For video-to-video
+DEFAULT_DENOISE = 0.70  # For video-to-video
+
+# ── LCM (Latent Consistency Model) ────────────────────
+LCM_ENABLED = True
+LCM_LORA = "lcm-lora-sdv1-5.safetensors"
+LCM_LORA_STRENGTH = 1.0
+LCM_SAMPLER = "lcm"
+LCM_SCHEDULER = "sgm_uniform"
 
 # ── Model Names (must match files in ComfyUI/models/) ─
 SD_CHECKPOINT = "v1-5-pruned-emaonly.safetensors"
@@ -51,10 +58,14 @@ IPADAPTER_MODEL = "ip-adapter-plus_sd15.safetensors"
 CLIP_VISION_MODEL = "sd1.5_model.safetensors"
 
 # ── IP-Adapter Defaults (M2-safe) ─────────────────────
-IPADAPTER_WEIGHT = 0.7   # 0.6-0.8 range balances fidelity vs. creativity
-IPADAPTER_NOISE = 0.05   # Low noise keeps M2 memory stable
+IPADAPTER_WEIGHT = 0.7
+IPADAPTER_NOISE = 0.05
 
 # ── Sampler Settings ──────────────────────────────────
-DEFAULT_SAMPLER = "euler_ancestral"
-DEFAULT_SCHEDULER = "normal"
+DEFAULT_SAMPLER = LCM_SAMPLER if LCM_ENABLED else "euler_ancestral"
+DEFAULT_SCHEDULER = LCM_SCHEDULER if LCM_ENABLED else "normal"
 SEED = -1  # -1 = random
+
+# ── Tiled VAE ─────────────────────────────────────────
+USE_TILED_VAE = True  # Prevents OOM on 8GB shared memory
+VAE_TILE_SIZE = 256

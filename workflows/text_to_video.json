@@ -5,12 +5,28 @@
             "ckpt_name": "v1-5-pruned-emaonly.safetensors"
         }
     },
+    "15": {
+        "class_type": "LoraLoader",
+        "inputs": {
+            "lora_name": "lcm-lora-sdv1-5.safetensors",
+            "strength_model": 1.0,
+            "strength_clip": 1.0,
+            "model": [
+                "1",
+                0
+            ],
+            "clip": [
+                "1",
+                1
+            ]
+        }
+    },
     "2": {
         "class_type": "CLIPTextEncode",
         "inputs": {
             "text": "POSITIVE_PROMPT",
             "clip": [
-                "1",
+                "15",
                 1
             ]
         }
@@ -20,7 +36,7 @@
         "inputs": {
             "text": "NEGATIVE_PROMPT",
             "clip": [
-                "1",
+                "15",
                 1
             ]
         }
@@ -28,9 +44,9 @@
     "4": {
         "class_type": "EmptyLatentImage",
         "inputs": {
-            "width": 512,
-            "height": 512,
-            "batch_size": 16
+            "width": 384,
+            "height": 384,
+            "batch_size": 12
         }
     },
     "5": {
@@ -41,7 +57,7 @@
             "motion_scale": 1.0,
             "apply_v2_models_properly": true,
             "model": [
-                "1",
+                "15",
                 0
             ],
             "context_options": [
@@ -64,10 +80,10 @@
         "class_type": "KSampler",
         "inputs": {
             "seed": -1,
-            "steps": 20,
-            "cfg": 7.5,
-            "sampler_name": "euler_ancestral",
-            "scheduler": "normal",
+            "steps": 6,
+            "cfg": 1.8,
+            "sampler_name": "lcm",
+            "scheduler": "sgm_uniform",
             "denoise": 1.0,
             "model": [
                 "5",
@@ -88,8 +104,9 @@
         }
     },
     "8": {
-        "class_type": "VAEDecode",
+        "class_type": "VAEDecodeTiled",
         "inputs": {
+            "tile_size": 256,
             "samples": [
                 "7",
                 0

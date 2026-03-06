@@ -162,6 +162,12 @@ download_model \
     "${MODELS_DIR}/clip_vision/sd1.5_model.safetensors" \
     "CLIP Vision Encoder (SD 1.5)"
 
+# LCM-LoRA (Latent Consistency Model — 4x faster rendering)
+download_model \
+    "https://huggingface.co/latent-consistency/lcm-lora-sdv1-5/resolve/main/pytorch_lora_weights.safetensors" \
+    "${MODELS_DIR}/loras/lcm-lora-sdv1-5.safetensors" \
+    "LCM-LoRA (SD 1.5)"
+
 # ── 7. Create output directory ────────────────────────
 mkdir -p "${PROJECT_DIR}/outputs"
 

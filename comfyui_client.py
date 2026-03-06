@@ -83,6 +83,19 @@ class ComfyUIClient:
         r.raise_for_status()
         return r.content
 
+    def free_memory(self):
+        """Flush ComfyUI VRAM + MPS cache after generation to prevent overheating."""
+        try:
+            requests.post(f"{self.base_url}/free", json={"unload_models": True, "free_memory": True}, timeout=5)
+        except Exception:
+            pass
+        try:
+            import torch
+            if hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+                torch.mps.empty_cache()
+        except Exception:
+            pass
+
     # ── WebSocket Progress Tracking ────────────────────
 
     def execute_and_wait(self, workflow: dict, progress_callback=None) -> dict:
@@ -191,7 +204,17 @@ class ComfyUIClient:
         workflow["7"]["inputs"]["seed"] = seed
         workflow["7"]["inputs"]["steps"] = steps
         workflow["7"]["inputs"]["cfg"] = cfg
+        workflow["7"]["inputs"]["sampler_name"] = config.DEFAULT_SAMPLER
+        workflow["7"]["inputs"]["scheduler"] = config.DEFAULT_SCHEDULER
         workflow["9"]["inputs"]["frame_rate"] = config.DEFAULT_FPS
+
+        # Tiled VAE tile size
+        if config.USE_TILED_VAE and "8" in workflow:
+            workflow["8"]["inputs"]["tile_size"] = config.VAE_TILE_SIZE
+
+        # LCM LoRA strength
+        if config.LCM_ENABLED and "15" in workflow:
+            workflow["15"]["inputs"]["strength_model"] = config.LCM_LORA_STRENGTH
 
         return workflow
 
@@ -240,6 +263,7 @@ class ComfyUIClient:
         workflow["10"]["inputs"]["video"] = server_filename
         workflow["10"]["inputs"]["frame_load_cap"] = frames
         workflow["11"]["inputs"]["preprocessor"] = cn["preprocessor"]
+        workflow["11"]["inputs"]["resolution"] = config.DEFAULT_WIDTH
         workflow["12"]["inputs"]["control_net_name"] = cn["model"]
         workflow["13"]["inputs"]["strength"] = strength
         workflow["5"]["inputs"]["motion_scale"] = motion_scale
@@ -248,7 +272,17 @@ class ComfyUIClient:
         workflow["7"]["inputs"]["steps"] = steps
         workflow["7"]["inputs"]["cfg"] = cfg
         workflow["7"]["inputs"]["denoise"] = denoise
+        workflow["7"]["inputs"]["sampler_name"] = config.DEFAULT_SAMPLER
+        workflow["7"]["inputs"]["scheduler"] = config.DEFAULT_SCHEDULER
         workflow["9"]["inputs"]["frame_rate"] = config.DEFAULT_FPS
+
+        # Tiled VAE tile size
+        if config.USE_TILED_VAE and "8" in workflow:
+            workflow["8"]["inputs"]["tile_size"] = config.VAE_TILE_SIZE
+
+        # LCM LoRA strength
+        if config.LCM_ENABLED and "15" in workflow:
+            workflow["15"]["inputs"]["strength_model"] = config.LCM_LORA_STRENGTH
 
         # IP-Adapter: patch if reference image provided, else strip nodes
         if image_path:
@@ -256,10 +290,10 @@ class ComfyUIClient:
             workflow["22"]["inputs"]["image"] = server_image
             workflow["23"]["inputs"]["weight"] = ipadapter_weight
         else:
-            # Remove IP-Adapter nodes, connect model directly to AnimateDiff
+            # Remove IP-Adapter nodes, connect model directly to AnimateDiff via LoRA
             for nid in ["20", "22", "23"]:
                 workflow.pop(nid, None)
-            workflow["5"]["inputs"]["model"] = ["1", 0]
+            workflow["5"]["inputs"]["model"] = ["15", 0]
 
         return workflow
 
@@ -272,16 +306,20 @@ class ComfyUIClient:
     # ── High-Level Generate ────────────────────────────
 
     def generate_text_to_video(self, progress_callback=None, **kwargs) -> Optional[str]:
-        """Full text-to-video pipeline: build → execute → save output."""
+        """Full text-to-video pipeline: build → execute → save → cleanup."""
         workflow = self.build_text_to_video(**kwargs)
         outputs = self.execute_and_wait(workflow, progress_callback)
-        return self._save_first_video(outputs, "t2v")
+        result = self._save_first_video(outputs, "t2v")
+        self.free_memory()
+        return result
 
     def generate_video_to_video(self, progress_callback=None, **kwargs) -> Optional[str]:
-        """Full video-to-video pipeline: build → execute → save output."""
+        """Full video-to-video pipeline: build → execute → save → cleanup."""
         workflow = self.build_video_to_video(**kwargs)
         outputs = self.execute_and_wait(workflow, progress_callback)
-        return self._save_first_video(outputs, "v2v")
+        result = self._save_first_video(outputs, "v2v")
+        self.free_memory()
+        return result
 
     def _save_first_video(self, outputs: dict, prefix: str) -> Optional[str]:
         """Download the first video output and save locally."""

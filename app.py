@@ -179,7 +179,8 @@ def create_app():
 
         # Header
         gr.Markdown("# 🎬 AI Video Motion Control", elem_id="app-title")
-        gr.Markdown("MacBook Air M2 · AnimateDiff · ControlNet · IP-Adapter · ComfyUI", elem_id="app-subtitle")
+        gr.Markdown("MacBook Air M2 · 🛡️ Survival Mode · LCM · AnimateDiff · ComfyUI", elem_id="app-subtitle")
+        gr.Markdown("⚡ **Safe Mode Active** — 384×384 · LCM 6-step · Tiled VAE · Auto memory cleanup", elem_id="safe-mode-badge")
 
         # Status bar
         status = gr.Markdown(value=check_status)
@@ -201,15 +202,15 @@ def create_app():
                         )
 
                         with gr.Row():
-                            t2v_width = gr.Slider(256, 768, value=config.DEFAULT_WIDTH, step=64, label="Width")
-                            t2v_height = gr.Slider(256, 768, value=config.DEFAULT_HEIGHT, step=64, label="Height")
+                            t2v_width = gr.Slider(256, 512, value=config.DEFAULT_WIDTH, step=64, label="Width")
+                            t2v_height = gr.Slider(256, 512, value=config.DEFAULT_HEIGHT, step=64, label="Height")
 
                         with gr.Row():
-                            t2v_frames = gr.Slider(8, config.MAX_FRAMES, value=config.DEFAULT_FRAMES, step=1, label="Frames")
-                            t2v_steps = gr.Slider(10, 40, value=config.DEFAULT_STEPS, step=1, label="Steps")
+                            t2v_frames = gr.Slider(4, config.MAX_FRAMES, value=config.DEFAULT_FRAMES, step=1, label="Frames")
+                            t2v_steps = gr.Slider(2, 10, value=config.DEFAULT_STEPS, step=1, label="Steps (LCM)")
 
                         with gr.Row():
-                            t2v_cfg = gr.Slider(1.0, 15.0, value=config.DEFAULT_CFG, step=0.5, label="CFG Scale")
+                            t2v_cfg = gr.Slider(1.0, 4.0, value=config.DEFAULT_CFG, step=0.1, label="CFG Scale (LCM: 1.5-2.5)")
                             t2v_motion = gr.Slider(0.5, 1.5, value=config.DEFAULT_MOTION_SCALE, step=0.05, label="Motion Scale")
 
                         t2v_seed = gr.Number(label="Seed (-1 = random)", value=-1, precision=0)
@@ -264,11 +265,11 @@ def create_app():
                             v2v_denoise = gr.Slider(0.3, 1.0, value=config.DEFAULT_DENOISE, step=0.05, label="Denoise Strength")
 
                         with gr.Row():
-                            v2v_frames = gr.Slider(8, config.MAX_FRAMES, value=config.DEFAULT_FRAMES, step=1, label="Frames")
-                            v2v_steps = gr.Slider(10, 40, value=config.DEFAULT_STEPS, step=1, label="Steps")
+                            v2v_frames = gr.Slider(4, config.MAX_FRAMES, value=config.DEFAULT_FRAMES, step=1, label="Frames")
+                            v2v_steps = gr.Slider(2, 10, value=config.DEFAULT_STEPS, step=1, label="Steps (LCM)")
 
                         with gr.Row():
-                            v2v_cfg = gr.Slider(1.0, 15.0, value=config.DEFAULT_CFG, step=0.5, label="CFG Scale")
+                            v2v_cfg = gr.Slider(1.0, 4.0, value=config.DEFAULT_CFG, step=0.1, label="CFG Scale (LCM: 1.5-2.5)")
                             v2v_motion = gr.Slider(0.5, 1.5, value=config.DEFAULT_MOTION_SCALE, step=0.05, label="Motion Scale")
 
                         v2v_seed = gr.Number(label="Seed (-1 = random)", value=-1, precision=0)
