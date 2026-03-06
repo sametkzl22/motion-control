@@ -225,7 +225,7 @@ class ComfyUIClient:
         cn_map = {
             "openpose": {
                 "model": config.CONTROLNET_OPENPOSE,
-                "preprocessor": "DWOpenPosePreprocessor",
+                "preprocessor": "DWPreprocessor",
             },
             "depth": {
                 "model": config.CONTROLNET_DEPTH,
