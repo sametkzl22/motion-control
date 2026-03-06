@@ -52,7 +52,22 @@ class ComfyUIClient:
             "client_id": self.client_id,
         }
         r = requests.post(f"{self.base_url}/prompt", json=payload)
-        r.raise_for_status()
+        if r.status_code != 200:
+            try:
+                error_data = r.json()
+                if "node_errors" in error_data:
+                    errors = []
+                    for nid, nerr in error_data["node_errors"].items():
+                        for e in nerr.get("errors", []):
+                            errors.append(f"Node #{nid} ({nerr.get('class_type','?')}): {e.get('message','unknown')}")
+                    if errors:
+                        raise RuntimeError("ComfyUI validation errors:\n" + "\n".join(errors))
+                if "error" in error_data:
+                    err = error_data["error"]
+                    raise RuntimeError(f"ComfyUI error: {err.get('message', str(err))}")
+            except (ValueError, KeyError):
+                pass
+            r.raise_for_status()
         return r.json()["prompt_id"]
 
     def get_history(self, prompt_id: str) -> dict:
